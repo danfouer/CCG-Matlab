@@ -13,7 +13,7 @@ for i = 1:length(hb)
     end
     mesh2 = slice_mesh(mesh,ee);
     % construct f
-    f2 = rand(mesh2.nv,1);
+    f2 = ones(mesh2.nv,1);
     bd2 = boundary2(mesh2);
     f2(bd2{1}) = 0;
     f2(bd2{2}) = 1;
