@@ -1,10 +1,15 @@
 function bds = boundary2(mesh)
 nv = mesh.nv;
-ind = false(nv,1);
-ind(mesh.bd) = true;
+he = mesh.halfedge;
+edge = mesh.edge;
+eif = mesh.eif;
+ind = eif(:,1)<0|eif(:,2)<0;
+be = edge(ind,:);
+Ge = sparse(be(:,1),be(:,2),ones(size(be,1),1),nv,nv);
+Ge = Ge+Ge';
+ind = full(Ge(sub2ind([nv,nv],he(:,1),he(:,2)))==1);
 % find boundary halfedge
-indhe = ind(mesh.halfedge(:,1))&ind(mesh.halfedge(:,2));
-he = mesh.halfedge(indhe,:);
+he = he(ind,:);
 G = sparse(he(:,1),he(:,2),ones(size(he,1),1),nv,nv);
 bds = {};
 ind = false(nv,1);
