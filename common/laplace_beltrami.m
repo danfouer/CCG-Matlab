@@ -1,3 +1,27 @@
+% 这是一个计算网格上Laplace Beltrami算子的MATLAB函数。Laplace Beltrami算子是微分几何中的一个概念，
+% 用于描述曲面上的函数的变化率。该函数使用余切公式来计算Laplace Beltrami算子，其中有三种变体：'Polthier'、
+% 'Meyer'和'Desbrun'。默认使用'Polthier'方法。
+% 
+% 函数的输入参数为一个网格，包括三个部分：face、edge和vert。face是一个nf x 3的矩阵，
+% 表示网格的三角面片的连接关系；edge是一个ne x 2的矩阵，表示网格的边的连接关系；
+% vert是一个nv x 3的矩阵，表示网格的顶点坐标。函数的第二个输入参数是一个字符串，
+% 表示使用的余切公式的方法，可以是'Polthier'、'Meyer'或'Desbrun'。
+% 函数的输出是一个nv x nv的稀疏矩阵，表示Laplace Beltrami算子。
+% 
+% 函数的具体实现如下：
+% 
+% 1. 如果没有输入第二个参数，则默认使用'Polthier'方法。
+% 
+% 2. 根据输入的网格，计算边的权重。如果网格中已经包含了边的权重信息，则直接使用该信息，
+% 否则调用edge_weight函数计算边的权重。
+% 
+% 3. 根据选择的余切公式的方法，计算边的权重的加权平均值，并构造出Laplace Beltrami算子的稀疏矩阵。
+% 
+% 4. 对于每个顶点，将其对应的行减去该行的和，得到最终的Laplace Beltrami算子。
+% 
+% 函数中使用了vertex_area函数来计算顶点的面积，该函数根据选择的方法不同，计算的顶点面积也不同。
+% 其中，'mixed'方法计算的是顶点周围所有三角形的面积的平均值，
+% 'one_ring'方法计算的是顶点周围所有三角形的面积之和。
 %% laplace_beltrami 
 % Laplace Beltrami operator on the mesh.
 % 

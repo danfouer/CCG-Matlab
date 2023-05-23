@@ -1,3 +1,29 @@
+% 该函数用于计算给定顶点或所有顶点的一环邻居，可以选择是否按逆时针顺序排序。默认情况下不排序。
+% 
+% 输入参数：
+% - face: double类型，nf x 3，表示网格的连接性。
+% - vc: double类型，n x 1或1 x n，表示顶点集合，可以为空，相当于所有顶点。
+% - ordered: bool类型，标量，表示是否需要逆时针排序。
+% 
+% 输出参数：
+% - vr: cell类型，nv x 1，每个单元格是一个一环邻居顶点，是一个double类型的数组。
+% 
+% 函数的使用方法：
+% - 计算所有顶点的一环邻居，不排序：vr = vert_vert_ring(face)
+% - 计算顶点1:100的一环邻居，不排序：vr = vert_vert_ring(face,1:100,false)
+% - 计算顶点1:100的一环邻居，按逆时针排序：vr = vert_vert_ring(face,1:100,true)
+% - 计算所有顶点的一环邻居，按逆时针排序（可能很慢）：vr = vert_vert_ring(face,[],ordered)
+% - 与上一行代码等价：vr = vert_vert_ring(face,1:nv,ordered)
+% 
+% 函数的实现过程：
+% 1. 计算顶点数nv，假设面的编号从1开始，并按顺序编号。
+% 2. 如果vc为空，则vc为1:nv。
+% 3. 如果ordered未定义，则ordered为false。
+% 4. 初始化vr为一个大小为vc的cell数组。
+% 5. 计算边界bds，isbd表示每个顶点是否在边界上。
+% 6. 如果不排序，则计算邻接矩阵am，然后找到vc中每个顶点的邻居，将其存储在vr中。
+% 7. 如果需要排序，则使用三角剖分DT和vertexAttachments函数计算每个顶点的邻居，然后按逆时针顺序排序。
+% 8. 如果需要排序，但是使用vertexAttachments函数计算的排序速度太慢，则使用connectivity函数计算排序。
 %% vert_vert_ring 
 % Compute one-ring neighbor of given vertex or all vertex, with or 
 % without ccw order. Default is no order.

@@ -1,3 +1,24 @@
+% 这是一个用于读取OFF格式文件的MATLAB函数。该函数支持读取网格的连接关系和顶点位置，其他数据将被丢弃。
+% 
+% 函数的语法为：
+% 
+% [face,vertex] = read_off(filename)
+% [face,vertex,extra] = read_off(filename)
+% 
+% 其中，`filename` 是要读取的文件名，`face` 是一个大小为 `nf x 3` 的双精度数组，表示网格的连接关系，`vertex` 是一个大小为 `nv x 3` 的双精度数组，表示顶点的位置，`extra` 是一个结构体，包含除了 `face` 和 `vertex` 以外的所有数据。
+% 
+% 函数的实现过程如下：
+% 
+% 1. 打开文件，判断是否为 OFF 文件。
+% 2. 读取顶点和面的数量。
+% 3. 读取顶点数据。
+% 4. 读取面数据。
+% 5. 如果顶点数据包含颜色信息，则将颜色信息存入 `extra.Vertex_color` 中。
+% 6. 将面数据的索引加 1，因为 OFF 文件中的索引从 0 开始。
+% 7. 如果面数据包含颜色信息，则将颜色信息存入 `extra.Face_color` 中。
+% 8. 返回 `face`、`vertex` 和 `extra`。
+% 
+% 需要注意的是，该函数假设 OFF 文件中的面都是三角形，因此只返回三角形网格的连接关系。
 %% read_off
 % Read mesh data from OFF file.
 % 

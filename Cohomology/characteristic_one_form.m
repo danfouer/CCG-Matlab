@@ -1,3 +1,18 @@
+% 该函数用于计算特征一形式。
+% 
+% 输入参数：
+% - mesh: 包含网格信息的结构体。
+% - hb: cell类型，表示基础同调群的基。如果未定义，则使用homology_basis函数计算基。
+% 
+% 输出参数：
+% - cf: cell类型，表示特征一形式。
+% 
+% 函数的实现过程：
+% 1. 对于每个基hb{i}，使用slice_mesh函数将网格沿着hb{i}切开。
+% 2. 构造一个函数f2，其中沿着hb{i}的一侧为0，另一侧为1。
+% 3. 使用exterior_derivative函数计算df2，它是沿着切开的网格的一形式。
+% 4. 将df2映射回原始网格，得到df。
+% 5. 将df存储在cf{i}中。
 function cf = characteristic_one_form(mesh, hb)
 if ~exist('hb','var') || isempty(hb)
     hb = homology_basis(mesh);

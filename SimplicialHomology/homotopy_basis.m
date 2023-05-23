@@ -1,3 +1,28 @@
+% 本 MATLAB 代码实现了计算高亏格曲面的贪心同伦基的算法。该算法基于论文 [1] 中的算法。
+% 
+% 该函数的输入参数为一个网格结构体 `mesh`，输出参数为一个基的单元格数组 `hb`。对于亏格为零的曲面，返回空数组。
+% 
+% 该函数的实现过程如下：
+% 
+% 1. 通过 `compute_edge` 函数计算网格的边列表 `edge` 和每个面的边列表 `eif`。
+% 
+% 2. 通过 `compute_adjacency_matrix` 函数计算网格的邻接矩阵 `am` 和对角线矩阵 `amd`。
+% 
+% 3. 构造邻接矩阵 `G`，其中边的权重为其长度。
+% 
+% 4. 通过 `graphshortestpath` 函数或 `dijkstra` 函数计算从基点 `bi` 开始的最短路径 `dist` 和路径上的前驱节点 `pred`。
+% 
+% 5. 通过 `compute_dual_graph` 函数计算网格的对偶图 `amf`。
+% 
+% 6. 通过 `pred` 和 `amf` 计算出最大生成树 `tree`。
+% 
+% 7. 构造邻接矩阵 `G2`，其中不包含在 `tree` 中的边和被 `tree` 中的边穿过的边。
+% 
+% 8. 构造贪心同伦基，其中每个基都是 `G2` 中的一条边。
+% 
+% 其中，`compute_edge` 函数用于计算网格的边列表和每个面的边列表，`compute_adjacency_matrix` 函数用于计算网格的邻接矩阵和对角线矩阵，`compute_dual_graph` 函数用于计算网格的对偶图，`graphshortestpath` 函数或 `dijkstra` 函数用于计算最短路径，`minimum_spanning_tree` 函数或 `graphminspantree` 函数用于计算最大生成树。
+% 
+% 需要注意的是，该函数的实现过程中，使用了其他函数的实现，这些函数的实现过程可以参考其他代码的解释。
 %% compute greedy homotopy basis 
 % Compute a greedy homotopy group basis based on the algorithm in
 % paper[1]. Works for closed surface.

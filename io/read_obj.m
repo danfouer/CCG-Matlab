@@ -1,3 +1,31 @@
+% 这是一个用于读取Wavefront OBJ格式文件的MATLAB函数。该函数只支持三角形网格，支持读取几何顶点、纹理顶点、顶点法线和面（仅限三角形）等数据。其他数据将被丢弃。
+% 
+% 函数的语法为：
+% 
+% [face,vertex] = read_obj(filename)
+% [face,vertex,extra] = read_obj(filename)
+% 
+% 其中，`filename` 是要读取的文件名，`face` 是一个大小为 `nf x 3` 的双精度数组，表示网格的连接关系，`vertex` 是一个大小为 `nv x 3` 的双精度数组，表示顶点的位置，`extra` 是一个结构体，包含除了 `face` 和 `vertex` 以外的所有数据。
+% 
+% 函数的实现过程如下：
+% 
+% 1. 将整个文件读入一个字符串。
+% 2. 将字符串按行分割，去掉空行和注释行。
+% 3. 找到所有以 'f' 开头的面行。
+% 4. 确定面行的格式。
+% 5. 将所有面行连接成一个字符串。
+% 6. 从字符串中扫描面数据。
+% 7. 找到所有以 'v ' 开头的顶点行。
+% 8. 确定顶点行的格式。
+% 9. 将所有顶点行连接成一个字符串。
+% 10. 从字符串中扫描顶点数据。
+% 11. 将所有其他数据存入结构体 `extra` 中。
+% 12. 如果顶点行包含颜色信息，则将颜色信息存入 `extra.vertex_color` 中。
+% 13. 检查是否包含纹理和法线信息，如果包含，则将其存入 `extra.texture` 和 `extra.normal` 中。
+% 14. 如果同时包含纹理和法线信息，则从 `face` 数组中提取 `face_texture` 和 `face_normal`，并将其存入 `extra.face_texture` 和 `extra.face_normal` 中。
+% 15. 如果只包含纹理信息，则从 `face` 数组中提取 `face_texture`，并将其存入 `extra.face_texture` 中。
+% 16. 如果只包含法线信息，则从 `face` 数组中提取 `face_normal`，并将其存入 `extra.face_normal` 中。
+% 17. 返回 `face`、`vertex` 和 `extra`。
 %% read obj 
 % Read mesh data from wavefront OBJ format file, only triangle mesh supported. 
 % 
