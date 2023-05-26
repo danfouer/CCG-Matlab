@@ -59,27 +59,27 @@
 %  Copyright 2014 Computational Geometry Group
 %  Department of Mathematics, CUHK
 %  http://www.math.cuhk.edu.hk/~lmlui
-
-function ee = cut_graph(face)
-[am,amd] = adjacency_matrix(face);
-nf = size(face,1);
+% 这段代码将一个由三角面片组成的网格图割成多个不相连的部分，并返回连接这些部分的边缘列表
+function ee = cut_graph(face)%  1. 该函数接受一个面列表作为输入，并计算该面列表所表示的三角形网格图的邻接矩阵。
+[am,amd] = adjacency_matrix(face);% 2. 使用 adjacency_matrix(face) 函数计算邻接矩阵，并返回两个输出：'am' - 邻接矩阵和 'amd' - 有向邻接矩阵。 
+nf = size(face,1);% 3. 确定 'face' 的大小，并将一个队列初始化为模拟先进先出列表。 
 % use array to emulate queue
 queue = zeros(nf,1);
 queue(1) = 1;
 qs = 1; % point to queue start
 qe = 2; % point to queue end
 
-ft = false(nf,1);
+ft = false(nf,1); % 4. 将网格的第一个面添加到队列中，并使用一个布尔数组 'ft' 初始化，将第一个元素设置为 true。
 ft(1) = true;
 face4 = face(:,[1 2 3 1]);
 
-while qe > qs
+while qe > qs %5. while 循环运行，直到队列为空。对于队列中的每个面，检查其三个相邻面，以查看是否存在共享的边缘。 
     fi = queue(qs);
     qs = qs+1;
     for i = 1:3
         he = face4(fi,[i i+1]);
         sf = amd(he(2),he(1));
-        if sf       
+        if sf % 6. 如果找到共享的边缘，并且相邻的面之前未被访问过，则将其添加到队列中，标记为已访问，并从邻接矩阵中删除边缘。      
             if ~ft(sf)
                 queue(qe) = sf;
                 qe = qe+1;
@@ -89,11 +89,11 @@ while qe > qs
         end
     end
 end
-am((am<0)') = 0;
+am((am<0)') = 0; % 7. 一旦队列为空，将 'am' 中的负数条目更改为 0，并通过获取所有 'am' 中正数条目的上三角矩阵创建二进制邻接矩阵 'G'。
 G = triu(am>0);
 
 % prune the graph cut
-while true
+while true % 8. while 循环通过删除只连接到图的其余部分的一条边缘的任何顶点来修剪图。 
     Gs = full(sum(G,2))+full(sum(G,1))';
     ind = (Gs == 1);
     if sum(ind) ==0
@@ -104,4 +104,5 @@ while true
 end
 
 [I,J,~] = find(G);
-ee = [I,J];
+ee = [I,J]; % 9. 最终，将连接不相连部分的边缘作为矩阵 'ee' 返回，其中包含两列 - 连接顶点的索引。 
+% 注意：该代码使用广度优先搜索算法遍历整个网格并查找连接的组件。
